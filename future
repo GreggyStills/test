@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+
+# Compute time at some point in the future, given days, hours, minutes to add to the current time
+
+import argparse
+import sys
+import time
+
+
+def parse_args(args=()):
+    if not args:
+        args = ["--help"]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-d", dest="days", type=int, default=0)
+    parser.add_argument("-hh", dest="hours", type=int, default=0)
+    parser.add_argument("-m", dest="minutes", type=int, default=0)
+    parser.add_argument("-s", dest="seconds", type=int, default=0)
+    # return as a dictionary
+    return vars(parser.parse_args())
+
+
+def compute_future(adds):
+    """Compute time from now (epoch time, seconds), adding future increments"""
+    now = time.time()
+
+    # time increments, in seconds
+    day = 24*60*60
+    hour = 60*60
+    minute = 60
+
+    future = now + adds["days"]*day + adds["hours"]*hour + adds["minutes"]*minute + adds["seconds"]
+    return future
+
+
+cli_args = sys.argv[1:]
+a = parse_args(cli_args)
+f = compute_future(a)
+
+print(time.ctime(f))
